@@ -14,14 +14,10 @@ class ImageWriterResolverTest extends TestCase
     public function testResolvesFTPWriterType(): void
     {
         $ftpWriter = $this->createMock(FtpWriter::class);
-        $ftpWriter->method('supports')->willReturnCallback(function($type) {
-            return $type === 'ftp';
-        });
+        $ftpWriter->method('supports')->with('ftp')->willReturn(true);
 
         $localWriter = $this->createMock(LocalWriter::class);
-        $localWriter->method('supports')->willReturnCallback(function($type) {
-            return $type === 'local';
-        });
+        $localWriter->method('supports')->with('ftp')->willReturn(false);
 
         $resolver = new ImageWriterResolver([$ftpWriter, $localWriter]);
 
@@ -31,14 +27,10 @@ class ImageWriterResolverTest extends TestCase
     public function testResolvesLocalWriterType(): void
     {
         $ftpWriter = $this->createMock(FtpWriter::class);
-        $ftpWriter->method('supports')->willReturnCallback(function($type) {
-            return $type === 'ftp';
-        });
+        $ftpWriter->method('supports')->with('local')->willReturn(false);
 
         $localWriter = $this->createMock(LocalWriter::class);
-        $localWriter->method('supports')->willReturnCallback(function($type) {
-            return $type === 'local';
-        });
+        $localWriter->method('supports')->with('local')->willReturn(true);
 
         $resolver = new ImageWriterResolver([$ftpWriter, $localWriter]);
 
